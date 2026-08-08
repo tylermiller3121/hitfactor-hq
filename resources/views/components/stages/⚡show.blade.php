@@ -139,27 +139,74 @@ new class extends Component
     @endif
 
     <div class="rounded-xl border border-zinc-200 p-6 dark:border-zinc-700">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
                 <flux:heading size="lg">
                     Stage Videos
                 </flux:heading>
 
                 <flux:text class="mt-1">
-                    POV and third-person footage will be analyzed here.
+                    POV and third-person footage for analysis.
                 </flux:text>
             </div>
 
-            <flux:badge>
-                {{ $stage->videos->count() }}
-            </flux:badge>
+            <flux:button
+                variant="primary"
+                icon="arrow-up-tray"
+                :href="route('videos.upload', $stage)"
+                wire:navigate
+            >
+                Upload Video
+            </flux:button>
         </div>
+
+        @if (session('video-uploaded'))
+            <div class="mt-5 rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm">
+                {{ session('video-uploaded') }}
+            </div>
+        @endif
 
         @if ($stage->videos->isEmpty())
             <div class="mt-6 rounded-lg border border-dashed border-zinc-300 p-8 text-center dark:border-zinc-700">
                 <flux:text>
                     No videos uploaded yet.
                 </flux:text>
+            </div>
+        @else
+            <div class="mt-6 grid gap-4">
+                @foreach ($stage->videos as $video)
+                    <div class="rounded-lg border border-zinc-200 p-4 dark:border-zinc-700">
+                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <div class="min-w-0">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <flux:heading>
+                                        {{ $video->original_filename }}
+                                    </flux:heading>
+
+                                    <flux:badge>
+                                        {{ strtoupper(str_replace('_', ' ', $video->video_type)) }}
+                                    </flux:badge>
+
+                                    <flux:badge>
+                                        {{ ucfirst($video->processing_status) }}
+                                    </flux:badge>
+                                </div>
+
+                                <div class="mt-2 text-sm text-zinc-500">
+                                    @if ($video->size_bytes)
+                                        {{ number_format($video->size_bytes / 1024 / 1024, 1) }} MB
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        @if ($video->notes)
+                            <flux:text class="mt-3">
+                                {{ $video->notes }}
+                            </flux:text>
+                        @endif
+                    </div>
+                @endforeach
             </div>
         @endif
     </div>

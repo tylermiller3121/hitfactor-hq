@@ -21,6 +21,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::livewire('stages/{stage}', 'stages.show')
         ->name('stages.show');
+
+    Route::livewire('stages/{stage}/videos/upload', 'videos.upload')
+        ->name('videos.upload');
 });
 
 require __DIR__.'/settings.php';

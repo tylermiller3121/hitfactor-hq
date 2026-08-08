@@ -19,6 +19,7 @@ services:
             IGNITION_LOCAL_SITES_PATH: '${PWD}'
         volumes:
             - '.:/var/www/html'
+            - './docker/8.5/php.ini:/etc/php/8.5/cli/conf.d/zz-hitfactor.ini'
         networks:
             - sail
         depends_on:
