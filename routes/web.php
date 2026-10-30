@@ -13,6 +13,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::livewire('matches/create', 'matches.create')
         ->name('matches.create');
 
+    Route::livewire('matches/import', 'matches.import')
+        ->name('matches.import');
+
     Route::livewire('matches/{matchResult}', 'matches.show')
         ->name('matches.show');
 

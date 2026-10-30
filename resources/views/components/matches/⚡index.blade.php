@@ -54,14 +54,24 @@ new #[Title('Matches')] class extends Component
             </flux:text>
         </div>
 
-        <flux:button
-            variant="primary"
-            icon="plus"
-            :href="route('matches.create')"
-            wire:navigate
-        >
-            Add Match
-        </flux:button>
+        <div class="flex gap-2">
+            <flux:button
+                icon="arrow-up-tray"
+                :href="route('matches.import')"
+                wire:navigate
+            >
+                Import from PractiScore
+            </flux:button>
+
+            <flux:button
+                variant="primary"
+                icon="plus"
+                :href="route('matches.create')"
+                wire:navigate
+            >
+                Add Match
+            </flux:button>
+        </div>
     </div>
 
     <flux:input
