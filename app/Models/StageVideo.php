@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class StageVideo extends Model
 {
+    /** @use HasFactory<Factory<self>> */
     use HasFactory;
 
     protected $fillable = [
@@ -46,6 +48,9 @@ class StageVideo extends Model
         ];
     }
 
+    /**
+     * @return BelongsTo<Stage, $this>
+     */
     public function stage(): BelongsTo
     {
         return $this->belongsTo(Stage::class);

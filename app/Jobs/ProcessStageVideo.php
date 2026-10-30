@@ -5,18 +5,21 @@ namespace App\Jobs;
 use App\Models\StageVideo;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Process;
+use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class ProcessStageVideo implements ShouldQueue
 {
     use Queueable;
 
+    public int $tries = 1;
+
+    public int $timeout = 150;
+
     public function __construct(
         public int $stageVideoId
-    ) {
-    }
+    ) {}
 
     public function handle(): void
     {
@@ -59,7 +62,10 @@ class ProcessStageVideo implements ShouldQueue
                 flags: JSON_THROW_ON_ERROR
             );
 
-            $videoStream = collect($metadata['streams'] ?? [])
+            /** @var array<int, array<string, mixed>> $streams */
+            $streams = $metadata['streams'] ?? [];
+
+            $videoStream = collect($streams)
                 ->firstWhere('codec_type', 'video');
 
             if (! $videoStream) {
@@ -120,6 +126,17 @@ class ProcessStageVideo implements ShouldQueue
 
             throw $exception;
         }
+    }
+
+    public function failed(?Throwable $exception): void
+    {
+        StageVideo::whereKey($this->stageVideoId)
+            ->where('processing_status', 'processing')
+            ->update([
+                'processing_status' => 'failed',
+                'processing_error' => $exception?->getMessage()
+                    ?? 'Video processing failed.',
+            ]);
     }
 
     private function parseFrameRate(?string $value): ?float

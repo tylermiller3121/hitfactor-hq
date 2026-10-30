@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Stage extends Model
 {
+    /** @use HasFactory<Factory<self>> */
     use HasFactory;
 
     protected $fillable = [
@@ -36,16 +38,25 @@ class Stage extends Model
         ];
     }
 
+    /**
+     * @return BelongsTo<MatchResult, $this>
+     */
     public function matchResult(): BelongsTo
     {
         return $this->belongsTo(MatchResult::class);
     }
 
+    /**
+     * @return HasOne<StageResult, $this>
+     */
     public function result(): HasOne
     {
         return $this->hasOne(StageResult::class);
     }
 
+    /**
+     * @return HasMany<StageVideo, $this>
+     */
     public function videos(): HasMany
     {
         return $this->hasMany(StageVideo::class);

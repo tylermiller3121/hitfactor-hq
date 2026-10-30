@@ -26,6 +26,34 @@ services:
             - mysql
             - redis
             - mailpit
+    queue:
+        build:
+            context: './vendor/laravel/sail/runtimes/8.5'
+            dockerfile: Dockerfile
+            args:
+                WWWGROUP: '${WWWGROUP}'
+        image: 'sail-8.5/app'
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
+        environment:
+            WWWUSER: '${WWWUSER}'
+            LARAVEL_SAIL: 1
+            DB_QUEUE_RETRY_AFTER: 180
+        volumes:
+            - '.:/var/www/html'
+            - './docker/8.5/php.ini:/etc/php/8.5/cli/conf.d/zz-hitfactor.ini'
+        command:
+            - php
+            - artisan
+            - queue:work
+            - '--tries=1'
+            - '--timeout=150'
+        restart: unless-stopped
+        networks:
+            - sail
+        depends_on:
+            - mysql
+            - redis
     mysql:
         image: 'mysql:8.4'
         ports:
