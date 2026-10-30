@@ -36,3 +36,6 @@ jobs:
 
       - name: Run CI Checks
         run: composer ci:check
+
+      - name: Test Detector Evaluation
+        run: python3 -m unittest discover -s tools/detector

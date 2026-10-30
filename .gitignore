@@ -23,3 +23,6 @@ yarn-error.log
 /.vscode
 /.zed
 *.swp
+/tools/detector/clips
+/tools/detector/runs
+__pycache__
