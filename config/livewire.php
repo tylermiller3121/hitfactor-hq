@@ -134,7 +134,7 @@ return [
         'rules' => [
             'required',
             'file',
-            'mimes:mp4,mov,m4v,webm',
+            'mimes:mp4,mov,m4v,webm,html,htm',
             'max:1048576',
         ],
 
