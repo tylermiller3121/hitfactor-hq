@@ -15,6 +15,14 @@
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
+                    <flux:sidebar.item
+                        icon="trophy"
+                        :href="route('matches.index')"
+                        :current="request()->routeIs('matches.*') || request()->routeIs('stages.*')"
+                        wire:navigate
+                    >
+                        {{ __('Matches') }}
+                    </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 
